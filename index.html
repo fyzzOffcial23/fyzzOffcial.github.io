@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FyzzOfficial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0f1a;
+      --fg: #c9d1e6;
+      --fg-dim: #9aa6bf;
+      --brand: #7cc6ff;
+      --btn-grad-a: #5c7cff;
+      --btn-grad-b: #7e4dff;
+      --ring: rgba(124, 198, 255, .35);
+      --card: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji', 'Segoe UI Symbol';
+      color:var(--fg);
+      background: var(--bg);
+      overflow-x:hidden;
+    }
+    
+    /* Loading Animation */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(124, 198, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--brand);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    /* Navigation */
+    .nav{
+      position:sticky;
+      top:0;
+      width:100%;
+      z-index:10;
+      backdrop-filter:saturate(130%) blur(8px);
+      background: rgba(11,15,26,0.8);
+      border-bottom:1px solid rgba(255,255,255,0.04);
+    }
+    
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:18px 20px;
+    }
+    
+    .brand{
+      font-weight:800;
+      font-size:22px;
+      letter-spacing:.2px;
+      color:var(--brand);
+      text-decoration:none;
+    }
+    
+    /* Hero Section */
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position: relative;
+    }
+    
+    .hero-inner{
+      max-width:980px;
+      margin:0 auto;
+      padding:40px 20px;
+      text-align:center;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .title{
+      margin:0 0 20px;
+      line-height:1.1;
+      font-size:clamp(42px, 6vw, 72px);
+      font-weight:800;
+      letter-spacing:-0.02em;
+      background: linear-gradient(135deg, #9ecbff 0%, #6ea1ff 50%, #7cc6ff 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    
+    .title .line2{
+      display:block;
+      margin-top: 10px;
+    }
+    
+    .desc{
+      margin:25px auto 40px;
+      max-width:600px;
+      font-size:clamp(16px, 2.5vw, 20px);
+      line-height:1.6;
+      color:var(--fg-dim);
+    }
+    
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      justify-content:center;
+      margin-top: 30px;
+    }
+    
+    .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+      padding:16px 32px;
+      border-radius:12px;
+      font-size:16px;
+      transition:all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .btn-primary{
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color:#fff;
+      box-shadow:0 8px 25px rgba(37, 99, 235, 0.3);
+    }
+    
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 35px rgba(37, 99, 235, 0.4);
+    }
+    
+    .btn-ghost{
+      background: transparent;
+      color:#e7eaf3;
+      border:2px solid rgba(231,234,243,0.3);
+    }
+    
+    .btn-ghost:hover{
+      background: rgba(255,255,255,0.1);
+      transform:translateY(-2px);
+    }
+    
+    /* Background Effects */
+    .bg-effects {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .bg-gradient {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at top right, rgba(49,74,116,0.4) 0%, transparent 50%),
+                 radial-gradient(ellipse at bottom left, rgba(31,67,102,0.4) 0%, transparent 50%);
+    }
+    
+    /* Footer Spacing */
+    .footer-space{
+      height:10vh;
+    }
+    
+    /* Bug Report Section */
+    .bug-report {
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid rgba(124, 198, 255, 0.2);
+      padding: 30px 20px;
+      margin-top: 40px;
+    }
+    
+    .bug-report h3 {
+      color: var(--brand);
+      margin-top: 0;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+    
+    .bug-report h3:before {
+      content: "🐛";
+    }
+    
+    .bug-form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid rgba(124, 198, 255, 0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--fg);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(124, 198, 255, 0.2);
+      background: rgba(11, 15, 26, 0.6);
+      color: var(--fg);
+      font-family: inherit;
+      font-size: 15px;
+      transition: border-color 0.3s;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .btn-report {
+      background: linear-gradient(135deg, var(--btn-grad-a), var(--btn-grad-b));
+      color: white;
+      width: 100%;
+      padding: 14px;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-report:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 198, 255, 0.3);
+    }
+    
+    .btn-report:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .form-footer {
+      text-align: center;
+      margin-top: 20px;
+      color: var(--fg-dim);
+      font-size: 14px;
+    }
+    
+    .form-footer a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+    
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid rgba(124, 198, 255, 0.2);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: 1000;
+      max-width: 350px;
+    }
+    
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .notification.success {
+      border-left: 4px solid #2ecc71;
+    }
+    
+    .notification.error {
+      border-left: 4px solid #ff4757;
+    }
+    
+    .notification-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* Responsive */
+    @media (max-width:768px){
+      .wrap{
+        padding:16px;
+      }
+      
+      .btn{
+        width:100%;
+        max-width:280px;
+      }
+      
+      .actions{
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .desc{
+        margin:20px auto 30px;
+        padding:0 10px;
+      }
+      
+      .hero-inner{
+        padding:60px 20px;
+      }
+      
+      .title{
+        font-size:clamp(36px, 8vw, 48px);
+        line-height:1.2;
+      }
+      
+      .bug-report {
+        padding: 20px 15px;
+      }
+      
+      .bug-form {
+        padding: 20px;
+      }
+    }
+    
+    @media (max-width:480px){
+      .title{
+        font-size:32px;
+      }
+      
+      .desc{
+        font-size:16px;
+      }
+      
+      .btn{
+        padding:14px 24px;
+      }
+      
+      .bug-form {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loader"></div>
+  </div>
+
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#">FyzzOfficial</a>
+    </div>
+  </header>
+  
+  <main class="hero">
+    <!-- Background Effects -->
+    <div class="bg-effects">
+      <div class="bg-gradient"></div>
+    </div>
+    
+    <div class="hero-inner">
+      <h1 class="title">
+        Premium Hosting
+        <span class="line2">For Your Business</span>
+      </h1>
+      
+      <p class="desc">
+        High-performance hosting solutions with 99.9% uptime guarantee and 24/7 expert support.
+      </p>
+      
+      <div class="actions">
+        <a class="btn btn-primary" href="produk.html">Get Started</a>
+        <button class="btn btn-ghost">Learn More</button>
+      </div>
+    </div>
+  </main>
+  
+  <div class="footer-space"></div>
+
+  <!-- Bug Report Section -->
+  <div class="bug-report">
+    <div class="wrap">
+      <h3>Laporkan Bug</h3>
+      <form class="bug-form" id="bugForm">
+        <div class="form-group">
+          <label for="bugTitle">Judul Bug</label>
+          <input type="text" id="bugTitle" class="form-control" placeholder="Apa yang terjadi?" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="bugDescription">Deskripsi Bug</label>
+          <textarea id="bugDescription" class="form-control" placeholder="Jelaskan secara detail bug yang Anda temukan..." required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="contactInfo">Info Kontak (Opsional)</label>
+          <input type="text" id="contactInfo" class="form-control" placeholder="Telegram/Email untuk follow-up">
+        </div>
+        
+        <button type="submit" class="btn-report" id="submitBtn">
+          Kirim Laporan
+        </button>
+        
+        <div class="form-footer">
+          Laporan akan dikirim ke <a href="https://t.me/FixzzCok" target="_blank">@FixzzCok</a> di Telegram
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <div class="notification-content">
+      <span id="notificationMessage"></span>
+    </div>
+  </div>
+
+  <script>
+    // Animasi loading
+    document.addEventListener('DOMContentLoaded', function() {
+      const loadingScreen = document.getElementById('loadingScreen');
+      
+      // Tampilkan loading screen
+      loadingScreen.style.display = 'flex';
+      
+      // Sembunyikan loading screen setelah 2 detik
+      setTimeout(function() {
+        loadingScreen.classList.add('fade-out');
+        
+        // Hapus elemen setelah animasi selesai
+        setTimeout(function() {
+          loadingScreen.style.display = 'none';
+        }, 500);
+      }, 2000);
+      
+      // Setup form submission
+      const bugForm = document.getElementById('bugForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const notification = document.getElementById('notification');
+      const notificationMessage = document.getElementById('notificationMessage');
+      
+      bugForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('bugTitle').value;
+        const description = document.getElementById('bugDescription').value;
+        const contact = document.getElementById('contactInfo').value;
+        
+        // Disable button during submission
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Mengirim...';
+        
+        try {
+          // Send message to Telegram using Bot API
+          const botToken = '8358436742:AAFvcCw-npI6pkv_4bC3eoxgkwDONn8qI_I'; // Ganti dengan token bot Telegram Anda
+          const chatId = '7491293841'; // Ganti dengan chat ID Anda
+          
+          const message = `🐛 *LAPORAN BUG* 🐛
+          
+*Judul:* ${title}
+*Deskripsi:* ${description}
+${contact ? `*Kontak:* ${contact}` : ''}
+          
+*Waktu:* ${new Date().toLocaleString('id-ID')}
+*URL:* ${window.location.href}`;
+          
+          // Encode message for URL
+          const encodedMessage = encodeURIComponent(message);
+          
+          // Create the Telegram API URL
+          const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodedMessage}&parse_mode=Markdown`;
+          
+          // Send the request
+          const response = await fetch(telegramUrl);
+          
+          if (response.ok) {
+            showNotification('Laporan bug berhasil dikirim! Terima kasih atas kontribusinya.', 'success');
+            bugForm.reset();
+          } else {
+            throw new Error('Gagal mengirim laporan');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          showNotification('Maaf, terjadi kesalahan saat mengirim laporan. Silakan coba lagi.', 'error');
+        } finally {
+          // Re-enable button
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Kirim Laporan';
+        }
+      });
+      
+      function showNotification(message, type) {
+        notification.className = 'notification ' + type;
+        notificationMessage.textContent = message;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 5000);
+      }
+    });
+  </script>
+</body>
+</html>
